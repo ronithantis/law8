@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>שיעור 4 · ראיות — מילות מפתח</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@700;900&family=Rubik:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#161a22;
+    --bg-deep-2:#1e2430;
+    --paper:#ecdfbf;
+    --paper-2:#e3d3a8;
+    --ink:#2a2117;
+    --red:#a8262c;
+    --red-dark:#7e1c21;
+    --yellow:#e7b324;
+    --yellow-dark:#b8870f;
+    --line:#c7af7c;
+    --cell: clamp(26px, 6.2vw, 44px);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 20% 10%, rgba(255,255,255,0.04), transparent 40%),
+      radial-gradient(circle at 80% 90%, rgba(255,255,255,0.03), transparent 45%),
+      var(--bg-deep);
+    background-color:var(--bg-deep);
+    background-image:
+      linear-gradient(var(--bg-deep-2) 1px, transparent 1px),
+      linear-gradient(90deg, var(--bg-deep-2) 1px, transparent 1px);
+    background-size: 28px 28px;
+    font-family:'Rubik', sans-serif;
+    color:var(--paper);
+    display:flex;
+    justify-content:center;
+    padding:18px 12px 60px;
+  }
+  .wrap{
+    width:100%;
+    max-width:760px;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    position:relative;
+    text-align:center;
+    margin-bottom:18px;
+    padding:14px 10px 18px;
+  }
+  .case-tag{
+    display:inline-block;
+    background:var(--red);
+    color:#fff8e6;
+    font-weight:800;
+    font-size:13px;
+    letter-spacing:1px;
+    padding:5px 14px;
+    border-radius:3px;
+    transform:rotate(-2deg);
+    box-shadow:0 2px 0 rgba(0,0,0,0.35);
+    margin-bottom:10px;
+  }
+  h1{
+    font-family:'Frank Ruhl Libre', serif;
+    font-weight:900;
+    font-size:clamp(26px,5.5vw,38px);
+    margin:0 0 6px;
+    color:#f6efd9;
+    text-shadow:0 2px 0 rgba(0,0,0,0.4);
+  }
+  h1 span{ color:var(--yellow); }
+  .subtitle{
+    font-size:14px;
+    color:#b9b2a0;
+    margin:0;
+  }
+  .tapeline{
+    position:absolute;
+    top:-4px; right:50%;
+    width:140px; height:22px;
+    transform: translateX(50%) rotate(-3deg);
+    background: repeating-linear-gradient(45deg, var(--yellow) 0 10px, var(--ink) 10px 12px);
+    opacity:0.9;
+    border-radius:2px;
+    box-shadow:0 2px 4px rgba(0,0,0,0.4);
+  }
+
+  /* ---------- instructions ---------- */
+  .howto{
+    background:#252b38;
+    border:1px dashed #4a5266;
+    border-radius:10px;
+    padding:10px 14px;
+    font-size:13.5px;
+    color:#cdd2de;
+    margin-bottom:16px;
+    line-height:1.7;
+  }
+  .howto b{color:var(--yellow);}
+
+  /* ---------- progress ---------- */
+  .progress-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:14px;
+    flex-wrap:wrap;
+  }
+  .progress-pill{
+    background:#1f2533;
+    border:1px solid #3a4154;
+    border-radius:30px;
+    padding:8px 16px;
+    font-weight:700;
+    font-size:14px;
+    color:#f0e6c8;
+  }
+  .progress-pill b{color:var(--yellow); font-size:16px;}
+  .btn{
+    border:none;
+    cursor:pointer;
+    font-family:'Rubik', sans-serif;
+    font-weight:700;
+    font-size:13.5px;
+    padding:9px 16px;
+    border-radius:8px;
+    transition:transform .12s ease, filter .12s ease;
+  }
+  .btn:active{ transform:scale(0.96); }
+  .btn-yellow{ background:var(--yellow); color:#3a2a06; }
+  .btn-yellow:hover{ filter:brightness(1.08); }
+  .btn-outline{
+    background:transparent;
+    color:#dcd6c2;
+    border:1px solid #4a5266;
+  }
+  .btn-outline:hover{ background:#262d3c; }
+  .btn-row{ display:flex; gap:8px; flex-wrap:wrap; }
+
+  /* ---------- board ---------- */
+  .board{
+    background:
+      linear-gradient(var(--paper), var(--paper-2));
+    border-radius:14px;
+    padding:18px 12px;
+    box-shadow:
+      0 14px 28px rgba(0,0,0,0.45),
+      inset 0 0 0 6px rgba(255,255,255,0.18),
+      inset 0 0 0 8px var(--red-dark);
+    position:relative;
+    margin-bottom:18px;
+    display:flex;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .corner-tape{
+    position:absolute;
+    width:64px; height:24px;
+    background: repeating-linear-gradient(45deg, var(--yellow) 0 8px, var(--ink) 8px 10px);
+    opacity:0.85;
+    box-shadow:0 1px 3px rgba(0,0,0,0.4);
+  }
+  .corner-tape.tl{ top:-6px; right:-10px; transform:rotate(45deg); }
+  .corner-tape.br{ bottom:-6px; left:-10px; transform:rotate(45deg); }
+
+  #grid{
+    direction:rtl;
+    display:grid;
+    gap:2px;
+    touch-action:none;
+    user-select:none;
+    -webkit-user-select:none;
+  }
+  .cell{
+    width:var(--cell);
+    height:var(--cell);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:800;
+    font-size:calc(var(--cell)*0.5);
+    color:var(--ink);
+    background:rgba(255,255,255,0.35);
+    border-radius:5px;
+    position:relative;
+    cursor:pointer;
+    transition:background .08s ease, box-shadow .08s ease;
+  }
+  .cell.selecting{
+    box-shadow: inset 0 0 0 3px var(--red);
+    background:rgba(168,38,44,0.18);
+  }
+  .cell .tag{
+    position:absolute;
+    top:-6px; right:-6px;
+    width:16px; height:16px;
+    border-radius:50%;
+    background:var(--ink);
+    color:#fff8e6;
+    font-size:9px;
+    font-weight:800;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 1px 2px rgba(0,0,0,0.5);
+    z-index:3;
+  }
+
+  /* ---------- word bank ---------- */
+  .bank-toggle-row{
+    display:flex;
+    justify-content:center;
+    margin-bottom:10px;
+  }
+  .bank{
+    background:#1f2533;
+    border:1px solid #3a4154;
+    border-radius:12px;
+    padding:14px;
+    display:none;
+  }
+  .bank.open{ display:block; }
+  .bank-title{
+    font-size:13px;
+    color:#9aa2b4;
+    margin:0 0 10px;
+    font-weight:700;
+    text-align:center;
+  }
+  .bank-grid{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:center;
+  }
+  .chip{
+    padding:7px 12px;
+    border-radius:20px;
+    font-size:13.5px;
+    font-weight:700;
+    background:#2b3242;
+    color:#cfd5e2;
+    border:1px solid #3e4658;
+    transition:all .25s ease;
+    position:relative;
+  }
+  .chip.found{
+    text-decoration:line-through;
+    color:#1e1709;
+  }
+
+  /* ---------- win banner ---------- */
+  .win{
+    display:none;
+    text-align:center;
+    margin-top:16px;
+    padding:16px;
+    border-radius:12px;
+    background:var(--red);
+    color:#fff8e6;
+    font-weight:800;
+    font-size:17px;
+    box-shadow:0 6px 16px rgba(0,0,0,0.4);
+  }
+  .win.show{ display:block; }
+  .win small{ display:block; font-weight:500; font-size:13px; margin-top:6px; opacity:0.9;}
+
+  @media (max-width:420px){
+    h1{font-size:24px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="tapeline"></div>
+    <div class="case-tag">תיק חקירה #04</div>
+    <h1>שיעור 4 — <span>ראיות</span></h1>
+    <p class="subtitle">תפזורת מילות מפתח אינטראקטיבית</p>
+  </header>
+
+  <div class="howto">
+    <b>איך משחקים:</b> גוררים עם העכבר (או האצבע) מהאות הראשונה של המילה אל האות האחרונה שלה — בכל כיוון: מימין לשמאל, מלמעלה למטה, או באלכסון. כל מילה שתימצא תיצבע בצבע אחר ותקבל מספר תג ראיה.
+  </div>
+
+  <div class="progress-row">
+    <div class="progress-pill">נמצאו <b id="foundCount">0</b> / <span id="totalCount">0</span> מילים</div>
+    <div class="btn-row">
+      <button class="btn btn-outline" id="resetBtn">איפוס תפזורת</button>
+      <button class="btn btn-yellow" id="newBtn">תפזורת חדשה</button>
+    </div>
+  </div>
+
+  <div class="board">
+    <div class="corner-tape tl"></div>
+    <div class="corner-tape br"></div>
+    <div id="grid"></div>
+  </div>
+
+  <div class="bank-toggle-row">
+    <button class="btn btn-outline" id="bankToggle">הצג מחסן מילים (רמז)</button>
+  </div>
+  <div class="bank" id="bank">
+    <p class="bank-title">מחסן המילים</p>
+    <div class="bank-grid" id="bankGrid"></div>
+  </div>
+
+  <div class="win" id="winBanner">
+    התיק נפתר! מצאתם את כל הראיות 🕵️
+    <small>כל הכבוד — סגרתם את התיק במלא הדיוק.</small>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  const WORDS_RAW = [
+    {display:"ראייה", letters:"ראייה"},
+    {display:"פורנזי", letters:"פורנזי"},
+    {display:"עדות", letters:"עדות"},
+    {display:"חפץ", letters:"חפץ"},
+    {display:"מסמך", letters:"מסמך"},
+    {display:"חקירה", letters:"חקירה"},
+    {display:"משפט", letters:"משפט"},
+    {display:"שופט", letters:"שופט"},
+    {display:"אמת", letters:"אמת"},
+    {display:"צדק", letters:"צדק"},
+    {display:"חוק", letters:"חוק"},
+    {display:"חשוד", letters:"חשוד"},
+    {display:"תובע", letters:"תובע"},
+    {display:"נתבע", letters:"נתבע"},
+    {display:"עורך דין", letters:"עורךדין"},
+    {display:"פיצוי", letters:"פיצוי"},
+    {display:"פרטיות", letters:"פרטיות"}
+  ];
+
+  const FORWARD_DIRS = [
+    {dr:0, dc:1},   // ימין -> שמאל
+    {dr:1, dc:0},   // מעלה -> מטה
+    {dr:1, dc:1},   // אלכסון: ימין-עליון -> שמאל-תחתון
+    {dr:-1, dc:1}   // אלכסון: ימין-תחתון -> שמאל-עליון
+  ];
+
+  const FILLER = "אבגדהוזחטיכלמנסעפצקרשת".split('');
+
+  function hsl(i, total){
+    const hue = Math.round((i / total) * 330);
+    return {
+      cell: `hsl(${hue}, 70%, 78%)`,
+      border: `hsl(${hue}, 65%, 42%)`,
+      tag: `hsl(${hue}, 60%, 32%)`,
+      chip: `hsl(${hue}, 70%, 88%)`,
+      chipText: `hsl(${hue}, 60%, 24%)`
+    };
+  }
+
+  let words = [];
+  let size = 13;
+  let grid = [];
+  let cellEls = [];
+  let cellColors = []; // array of arrays of color strings per cell
+  let foundCount = 0;
+  let anchor = null;
+  let dragging = false;
+  let currentPath = null;
+
+  const gridEl = document.getElementById('grid');
+  const bankGridEl = document.getElementById('bankGrid');
+  const foundCountEl = document.getElementById('foundCount');
+  const totalCountEl = document.getElementById('totalCount');
+  const winEl = document.getElementById('winBanner');
+  const bankEl = document.getElementById('bank');
+  const bankToggle = document.getElementById('bankToggle');
+
+  function attemptPlaceWord(g, letters, dirs, sz){
+    for(let attempt=0; attempt<3000; attempt++){
+      const dir = dirs[Math.floor(Math.random()*dirs.length)];
+      const row = Math.floor(Math.random()*sz);
+      const col = Math.floor(Math.random()*sz);
+      const endRow = row + dir.dr*(letters.length-1);
+      const endCol = col + dir.dc*(letters.length-1);
+      if(endRow<0||endRow>=sz||endCol<0||endCol>=sz) continue;
+      let ok = true;
+      for(let i=0;i<letters.length;i++){
+        const r = row+dir.dr*i, c = col+dir.dc*i;
+        const existing = g[r][c];
+        if(existing!==null && existing!==letters[i]){ ok=false; break; }
+      }
+      if(!ok) continue;
+      const cells = [];
+      for(let i=0;i<letters.length;i++){
+        const r = row+dir.dr*i, c = col+dir.dc*i;
+        g[r][c] = letters[i];
+        cells.push({r,c});
+      }
+      return cells;
+    }
+    return null;
+  }
+
+  function buildGrid(wordList, sz){
+    const g = Array.from({length:sz}, () => Array(sz).fill(null));
+    const sorted = [...wordList].sort((a,b)=> b.letters.length - a.letters.length);
+    const placements = [];
+    for(const w of sorted){
+      const cells = attemptPlaceWord(g, w.letters.split(''), FORWARD_DIRS, sz);
+      if(!cells) return null;
+      placements.push({word:w, cells});
+    }
+    for(let r=0;r<sz;r++){
+      for(let c=0;c<sz;c++){
+        if(g[r][c]===null){
+          g[r][c] = FILLER[Math.floor(Math.random()*FILLER.length)];
+        }
+      }
+    }
+    return {grid:g, placements};
+  }
+
+  function generatePuzzle(){
+    let sz = 13;
+    for(let outer=0; outer<6; outer++){
+      for(let tries=0; tries<25; tries++){
+        const res = buildGrid(WORDS_RAW, sz);
+        if(res){ size = sz; return res; }
+      }
+      sz += 2;
+    }
+    size = sz;
+    return {grid:Array.from({length:sz},()=>Array(sz).fill('א')), placements:[]};
+  }
+
+  function renderBoard(){
+    gridEl.innerHTML = '';
+    gridEl.style.gridTemplateColumns = `repeat(${size}, var(--cell))`;
+    cellEls = Array.from({length:size}, ()=>Array(size).fill(null));
+    cellColors = Array.from({length:size}, ()=>Array(size).fill(null).map(()=>[]));
+    for(let r=0;r<size;r++){
+      for(let c=0;c<size;c++){
+        const div = document.createElement('div');
+        div.className = 'cell';
+        div.dataset.r = r;
+        div.dataset.c = c;
+        div.textContent = grid[r][c];
+        gridEl.appendChild(div);
+        cellEls[r][c] = div;
+      }
+    }
+  }
+
+  function renderBank(){
+    bankGridEl.innerHTML = '';
+    words.forEach((w, i) => {
+      const chip = document.createElement('div');
+      chip.className = 'chip';
+      chip.textContent = w.display;
+      chip.dataset.idx = i;
+      bankGridEl.appendChild(chip);
+      w.chipEl = chip;
+    });
+  }
+
+  function setupPuzzle(){
+    const result = generatePuzzle();
+    grid = result.grid;
+    words = WORDS_RAW.map((w, i) => ({
+      ...w,
+      found:false,
+      colors: hsl(i, WORDS_RAW.length),
+      cells: (result.placements.find(p => p.word === w) || {}).cells || []
+    }));
+    foundCount = 0;
+    foundCountEl.textContent = '0';
+    totalCountEl.textContent = words.length;
+    winEl.classList.remove('show');
+    renderBoard();
+    renderBank();
+  }
+
+  function clearTempHighlight(){
+    if(!currentPath) return;
+    currentPath.forEach(p => cellEls[p.r][p.c].classList.remove('selecting'));
+  }
+
+  function showTempHighlight(path){
+    path.forEach(p => cellEls[p.r][p.c].classList.add('selecting'));
+  }
+
+  function pathFromAnchor(cur){
+    const dr0 = cur.r - anchor.r;
+    const dc0 = cur.c - anchor.c;
+    if(dr0===0 && dc0===0) return [anchor];
+    const straight = (dr0===0) || (dc0===0) || (Math.abs(dr0)===Math.abs(dc0));
+    if(!straight) return [anchor];
+    const steps = Math.max(Math.abs(dr0), Math.abs(dc0));
+    const sdr = Math.sign(dr0), sdc = Math.sign(dc0);
+    const path = [];
+    for(let i=0;i<=steps;i++){
+      path.push({ r: anchor.r + sdr*i, c: anchor.c + sdc*i });
+    }
+    return path;
+  }
+
+  function renderCellColors(r,c){
+    const colors = cellColors[r][c];
+    const el = cellEls[r][c];
+    if(colors.length===0){
+      el.style.background = '';
+      el.style.boxShadow = '';
+    } else if(colors.length===1){
+      el.style.background = colors[0].cell;
+      el.style.boxShadow = `inset 0 0 0 2px ${colors[0].border}`;
+    } else {
+      const stops = colors.map(c=>c.cell).join(', ');
+      el.style.background = `linear-gradient(135deg, ${stops})`;
+      el.style.boxShadow = `inset 0 0 0 2px ${colors[colors.length-1].border}`;
+    }
+  }
+
+  function addTag(cellPos, number, colorSet){
+    const el = cellEls[cellPos.r][cellPos.c];
+    if(el.querySelector('.tag')) return;
+    const tag = document.createElement('div');
+    tag.className = 'tag';
+    tag.style.background = colorSet.tag;
+    tag.textContent = number;
+    el.appendChild(tag);
+  }
+
+  function markFound(word, path){
+    word.found = true;
+    foundCount++;
+    path.forEach(p => {
+      cellColors[p.r][p.c].push(word.colors);
+      renderCellColors(p.r, p.c);
+    });
+    addTag(path[0], foundCount, word.colors);
+    foundCountEl.textContent = String(foundCount);
+    if(word.chipEl){
+      word.chipEl.classList.add('found');
+      word.chipEl.style.background = word.colors.chip;
+      word.chipEl.style.color = word.colors.chipText;
+      word.chipEl.style.borderColor = word.colors.border;
+    }
+    if(foundCount === words.length){
+      winEl.classList.add('show');
+    }
+  }
+
+  function finalizeSelection(path){
+    clearTempHighlight();
+    if(!path || path.length<2){ anchor=null; currentPath=null; return; }
+    let str = '';
+    for(const p of path){ str += grid[p.r][p.c]; }
+    const rev = str.split('').reverse().join('');
+    const match = words.find(w => !w.found && (w.letters===str || w.letters===rev));
+    if(match){
+      markFound(match, path);
+    }
+    anchor = null;
+    currentPath = null;
+  }
+
+  function cellFromPoint(x,y){
+    const el = document.elementFromPoint(x,y);
+    if(!el) return null;
+    const cellEl = el.closest('.cell');
+    if(!cellEl) return null;
+    return { r: +cellEl.dataset.r, c: +cellEl.dataset.c };
+  }
+
+  function onPointerMove(e){
+    if(!dragging) return;
+    const cur = cellFromPoint(e.clientX, e.clientY);
+    if(!cur) return;
+    clearTempHighlight();
+    currentPath = pathFromAnchor(cur);
+    showTempHighlight(currentPath);
+  }
+
+  function onPointerUp(e){
+    if(!dragging) return;
+    dragging = false;
+    window.removeEventListener('pointermove', onPointerMove);
+    window.removeEventListener('pointerup', onPointerUp);
+    finalizeSelection(currentPath);
+  }
+
+  gridEl.addEventListener('pointerdown', function(e){
+    const cur = cellFromPoint(e.clientX, e.clientY);
+    if(!cur) return;
+    e.preventDefault();
+    anchor = cur;
+    dragging = true;
+    currentPath = [anchor];
+    showTempHighlight(currentPath);
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointerup', onPointerUp);
+  });
+
+  bankToggle.addEventListener('click', function(){
+    const open = bankEl.classList.toggle('open');
+    bankToggle.textContent = open ? 'הסתר מחסן מילים' : 'הצג מחסן מילים (רמז)';
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', function(){
+    words.forEach(w => { w.found = false; });
+    foundCount = 0;
+    foundCountEl.textContent = '0';
+    winEl.classList.remove('show');
+    renderBoard();
+    renderBank();
+  });
+
+  document.getElementById('newBtn').addEventListener('click', setupPuzzle);
+
+  setupPuzzle();
+})();
+</script>
+</body>
+</html>
